@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Profile.css"
 import { AuthContext } from "../store/auth-context";
 
 const Profile=()=>{
     const[error,setError]=useState('');
+    const[loading,setLoading]=useState(false)
     const[updateData,setUpdateData]=useState({
         fullName:'',
         url:""
@@ -19,6 +20,48 @@ const Profile=()=>{
     const authCtx=useContext(AuthContext);
     const token=authCtx.token;
 
+    const fetchProfileData = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDB-LVwyV1VaSLT98Zaczb2xYKl7VsLy6c",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                idToken: token
+              }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          );
+          
+  
+          if (!response.ok) {
+            throw new Error("Could not fetch profile data.");
+          }
+  
+          const data = await response.json();
+          console.log(data);
+          const userData = data.users[0];
+          
+  
+          setUpdateData({
+            fullName: userData.displayName || "",
+            url: userData.photoUrl || ""
+          });
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
+        }
+      };
+
+      useEffect(()=>{
+        fetchProfileData();
+
+      },[token])
+  
+
     const submitFormHandler=(e)=>{
         e.preventDefault();
         const {fullName,url}=updateData;
@@ -32,8 +75,9 @@ const Profile=()=>{
             method:"POST",
             body:JSON.stringify({
                 idToken:token,
-                ...updateData,
-                returnSecureToken:true
+                displayName:updateData.fullName,
+                photoUrl:updateData.url,
+                returnSecureToken:true,
             }),
             headers:{
                 'Content-Type':'application/json'

@@ -5,6 +5,7 @@ import MyNavbar from "./components/MyNavbar";
 import { BrowserRouter as Router, Route, Routes ,useLocation,Navigate}from 'react-router-dom';
 import HomePage from "./pages/HomePage";
 import { AuthContext } from "./store/auth-context";
+import ForgotPassword from "./pages/ForgotPassword";
 import ProfilePage from "./pages/ProfilePage";
 function App(){
 
@@ -19,6 +20,7 @@ function App(){
         <Route path="/" element={isLoggedIn ? <HomePage/>: <Navigate to="/auth"/>}/>
         <Route path="/auth" element={<SignUpForm/>}/>
         <Route path="/profile" element={isLoggedIn ? <ProfilePage/> :<Navigate to="/auth"/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
       
 

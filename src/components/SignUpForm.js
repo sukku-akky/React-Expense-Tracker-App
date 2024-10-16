@@ -29,6 +29,10 @@ const SignUpForm = () => {
     });
   };
 
+  const forgotPasswordHandler=()=>{
+    navigate('/forgot-password')
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password, confirmPassword } = formData;
@@ -139,7 +143,7 @@ const SignUpForm = () => {
           />}
           {error && <p className="error">{error}</p>}
           <button type="submit" className='button'>{isLogin ? "Login":"Sign up"}</button>
-          {isLogin && <a>Forgot password</a>}
+          {isLogin && <a href="#" onClick={forgotPasswordHandler}>Forgot password?</a>}
 
         </form>
 
