@@ -23,6 +23,7 @@ const MyNavbar = () => {
         )}
 
         {!isLoggedIn && (
+          
           <li>
             <NavLink to="/auth" activeClassName="active">
               Login
@@ -32,7 +33,11 @@ const MyNavbar = () => {
 
         {isLoggedIn && (
           <>
-           
+            {/* <li>
+                <NavLink to="/profile" >
+                    Profile
+                </NavLink>
+            </li> */}
             <li>
               <button onClick={logoutHandler} className="logout-button">
                 Logout

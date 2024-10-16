@@ -1,0 +1,43 @@
+/* Home.css */
+
+.bt-p{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Button styles */
+.profile-button {
+    display: block; /* Center the button */
+    /* Center the button horizontally */
+    padding: 15px 30px; /* Adjust padding for size */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text color */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+    position: relative; /* Positioning for the span */
+}
+
+/* Change button color on hover */
+.profile-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Span styles */
+.profile-button span {
+    color: #FFEB3B; /* Yellow color for the span text */
+    font-weight: bold; /* Bold text */
+    margin-left: 5px; /* Space between text and span */
+}
+

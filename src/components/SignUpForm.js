@@ -36,17 +36,17 @@ const SignUpForm = () => {
     if (!email || !password) {
       setError('Please fill out all fields.'); // Updated to only check email and password
       return;
-  }
+    }
 
   if (!isLogin && !confirmPassword) {
     setError('Please fill out all fields.'); // Check confirmPassword only when not logging in
     return;
-}
+  }
 
-if (!isLogin && password !== confirmPassword) {
-  setError('Passwords do not match.');
-  return;
-}
+  if (!isLogin && password !== confirmPassword) {
+    setError('Passwords do not match.');
+    return;
+  }
 
    
     let url;
