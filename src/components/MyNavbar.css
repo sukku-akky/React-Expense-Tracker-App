@@ -61,3 +61,45 @@
     }
   }
   
+
+  /* Light Mode (default) */
+body.light-mode {
+  background-color: white;
+  color: black;
+}
+
+.navbar.light-mode {
+  background-color: lightgray;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: palevioletred;
+  color: white;
+}
+
+.navbar.dark-mode {
+  background-color: #333;
+}
+
+.theme-toggle-button {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+}
+
+.theme-toggle-button:hover {
+  background-color: #777;
+}
+.download-btn{
+  background-color:green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

@@ -1,16 +1,23 @@
-import React,{useContext} from "react";
+import React,{useContext, useEffect} from "react";
 import Profile from "./components/Profile";
 import SignUpForm from "./components/SignUpForm";
 import MyNavbar from "./components/MyNavbar";
 import { BrowserRouter as Router, Route, Routes ,useLocation,Navigate}from 'react-router-dom';
 import HomePage from "./pages/HomePage";
-import { AuthContext } from "./store/auth-context";
+import { useDispatch,useSelector } from "react-redux";
+import { authActions } from "./store/auth-redux";
 import ForgotPassword from "./pages/ForgotPassword";
 import ProfilePage from "./pages/ProfilePage";
+import { fetchDataFromEnd } from "./store/expense-actions";
+import userEvent from "@testing-library/user-event";
 function App(){
+  const dispatch=useDispatch();
+  const isLoggedIn=useSelector(state=>state.auth.isLoggedIn);
+  useEffect(()=>{
+    dispatch(fetchDataFromEnd());
 
-  const authCtx=useContext(AuthContext);
-  const isLoggedIn=authCtx.isLoggedIn;
+  },[])
+ 
   return (
     <>
     <Router>

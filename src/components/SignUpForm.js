@@ -1,11 +1,18 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import './SignUpForm.css';
-import { AuthContext } from '../store/auth-context';
+import { authActions } from '../store/auth-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import {useNavigate} from "react-router-dom";
+import { signUptoDatabase,logIntoDatabase } from '../store/auth-actions';
+
 const SignUpForm = () => {
-    const authCtx=useContext(AuthContext);
-    const[isLogin,setIsLogin]=useState(true);
+   
+    
     const navigate=useNavigate();
+    const dispatch=useDispatch();
+    const isLoggedIn=useSelector(state=>state.auth.isLoggedIn);
+    const token=useSelector(state=>state.auth.token)
+    const[isLogin,setIsLogin]=useState(true);
     
     const[isLoading,setIsLoading]=useState(false);
   const [formData, setFormData] = useState({
@@ -22,7 +29,7 @@ const SignUpForm = () => {
     })
 }
 
-  const handleChange = (e) => {
+  const handleChange =  async  (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -33,7 +40,7 @@ const SignUpForm = () => {
     navigate('/forgot-password')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     const { email, password, confirmPassword } = formData;
 
@@ -53,63 +60,27 @@ const SignUpForm = () => {
   }
 
    
-    let url;
+  try {
+    if (isLogin) {
 
-    if(isLogin){
-        url="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDB-LVwyV1VaSLT98Zaczb2xYKl7VsLy6c"
-
-    } else{
-        url="https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDB-LVwyV1VaSLT98Zaczb2xYKl7VsLy6c"
-
+      // Dispatch the login action
+      await dispatch(logIntoDatabase(formData));
+    } else {
+      // Dispatch the sign-up action
+       await dispatch(signUptoDatabase({email:formData.email,password:formData.password}));
     }
 
-    fetch(url,
-      {
-        method:"POST",
-        body:JSON.stringify({
-            ...formData,
-            returnSecureToken:true
-        }),
-        headers:{
-            'Content-Type':'application/json'
-        }
-    }
-
-    )
     
-    .then(res=>{
-        setIsLoading(false);
-        if(res.ok){
-            return res.json();
-
-        } else{
-            return res.json().then(data=>{
-                let errorMessage="Authentication failed";
-
-                if(data && data.error && data.error.message){
-                    errorMessage=data.error.message;
-                }
-                alert(errorMessage);
-            })
-        }
-    }).then(data=>{
-        authCtx.login(data.idToken,formData.email);
-        navigate('/');
-        setTimeout(() => {
-            authCtx.logout();
-        }, 300000);
-        
-        
-    }) .catch((error)=>{
-        alert(error.message)
-    })
-
-
-
-    // Handle form submission
-    alert('Sign up successful!');
-    setError(''); // Clear error message
-  };
+  } catch (error) {
+    setError('Failed to authenticate. Please try again.');
+  }
+ 
+  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate]); 
 
 
   return (

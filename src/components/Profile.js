@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Profile.css"
-import { AuthContext } from "../store/auth-context";
+import { useDispatch,useSelector } from "react-redux";
+import { authActions } from "../store/auth-redux";
+
 
 const Profile=()=>{
-    const[error,setError]=useState('');
-    const[loading,setLoading]=useState(false)
+   
     const[updateData,setUpdateData]=useState({
         fullName:'',
         url:""
@@ -17,11 +18,11 @@ const Profile=()=>{
         })
     }
 
-    const authCtx=useContext(AuthContext);
-    const token=authCtx.token;
+    const token=useSelector(state=>state.auth.token)
 
+    
     const fetchProfileData = async () => {
-        setLoading(true);
+    
         try {
           const response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDB-LVwyV1VaSLT98Zaczb2xYKl7VsLy6c",
             {
@@ -49,10 +50,10 @@ const Profile=()=>{
             fullName: userData.displayName || "",
             url: userData.photoUrl || ""
           });
-          setLoading(false);
+          
         } catch (error) {
-          setError(error.message);
-          setLoading(false);
+            console.log(error.message)
+         
         }
       };
 
@@ -67,8 +68,8 @@ const Profile=()=>{
         const {fullName,url}=updateData;
 
         if(!fullName || !url){
-            setError('Please fill out all fields.');
-            return;
+            throw new Error('please fill details')
+            
         }
 
         fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDB-LVwyV1VaSLT98Zaczb2xYKl7VsLy6c",{

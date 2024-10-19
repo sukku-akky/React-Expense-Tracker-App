@@ -2,16 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { Provider } from 'react-redux';
 
-import { AuthContextProvider } from './store/auth-context';
-import ExpenseProvider from './store/expense-context';
-
+import store from './store/redux-store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <AuthContextProvider>
-    <ExpenseProvider>
+  <Provider store={store}>
+
+    
     <App />
-    </ExpenseProvider>
-  </AuthContextProvider>
+  
+  </Provider>
 );
 

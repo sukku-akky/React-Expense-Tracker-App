@@ -1,32 +1,30 @@
-import React, { useState,useContext, useEffect } from "react";
-import "./Home.css"
-import { ExpenseContext } from "../../store/expense-context";
+import React, {  useEffect } from "react";
+import "./Home.css";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../store/auth-context";
+import { useSelector,useDispatch } from "react-redux";
+import { expenseActions } from "../../store/redux-store";
 import ExpenseForm from "../expenseForm/ExpenseForm";
 import ExpensesList from "../Expenses/ExpensesList";
+import { sendEmailVerificationToEnd } from "../../store/expense-actions";
+import { checkEmailVerificationToEnd } from "../../store/expense-actions";
 
 const Home=()=>{
     const navigate=useNavigate();
-    const authCtx=useContext(AuthContext);
-    const expenseCtx=useContext(ExpenseContext);
+    const dispatch=useDispatch();
+    const token=useSelector(state=>state.auth.token)
+    const emailVerified=useSelector(state=>state.exp.emailVerified)
    
-  
-
-    
-
-  
-
-  
-
     useEffect(()=>{
-        expenseCtx.checkEmailVerification();
-    },[expenseCtx.emailVerified])
+        checkEmailVerificationToEnd();
+    },[emailVerified])
 
 
     const handleClick=()=>{
         navigate('/profile')
 
+    }
+    const handleVerifyEmail=()=>{
+        dispatch(sendEmailVerificationToEnd(token));
     }
 
     return (
@@ -34,7 +32,7 @@ const Home=()=>{
         <div className="bt-p">
             <h1>Welcome to Expense Tracker</h1>
             <button className="profile-button" onClick={handleClick}>Your profile is incomplete.<span>Complete now</span></button>
-            {!expenseCtx.emailVerified && <button className="profile-button" onClick={expenseCtx.sendEmailVerification}>Verify your Email</button>}
+            {!emailVerified && <button className="profile-button" onClick={handleVerifyEmail}>Verify your Email</button>}
             
 
         
